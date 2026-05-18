@@ -1,0 +1,230 @@
+name: student_app
+description: "A new Flutter project."
+# The following line prevents the package from being accidentally published to
+# pub.dev using `flutter pub publish`. This is preferred for private packages.
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+
+# The following defines the version and build number for your application.
+# A version number is three numbers separated by dots, like 1.2.43
+# followed by an optional build number separated by a +.
+# Both the version and the builder number may be overridden in flutter
+# build by specifying --build-name and --build-number, respectively.
+# In Android, build-name is used as versionName while build-number used as versionCode.
+# Read more about Android versioning at https://developer.android.com/studio/publish/versioning
+# In iOS, build-name is used as CFBundleShortVersionString while build-number is used as CFBundleVersion.
+# Read more about iOS versioning at
+# https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
+# In Windows, build-name is used as the major, minor, and patch parts
+# of the product and file versions while build-number is used as the build suffix.
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.6.0
+
+# Dependencies specify other packages that your package needs in order to work.
+# To automatically upgrade your package dependencies to the latest versions
+# consider running `flutter pub upgrade --major-versions`. Alternatively,
+# dependencies can be manually updated by changing the version numbers below to
+# the latest version available on pub.dev. To see which dependencies have newer
+# versions available, run `flutter pub outdated`.
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # The following adds the Cupertino Icons font to your application.
+  # Use with the CupertinoIcons class for iOS style icons.
+  cupertino_icons: ^1.0.8
+  provider: ^6.1.1
+  fl_chart: 0.69.0
+  shared_preferences: ^2.3.2
+  intl: ^0.19.0
+  http: ^1.2.2
+  flutter_svg: ^2.0.10+1
+  async: ^2.11.0
+  path_provider: ^2.1.5
+  logger: ^1.1.0
+  mobile_scanner: ^7.1.3
+  flutter_tts: ^4.2.3
+  geolocator: ^11.0.0
+  geocoding: ^2.1.0
+  url_launcher: ^6.3.2
+  google_fonts: ^6.3.0
+  permission_handler: ^12.0.1
+  table_calendar: ^3.1.3
+  device_info_plus: ^11.3.0
+  barcode_scan2: ^4.5.1
+  fluttertoast: ^9.0.0
+  firebase_core: ^4.3.0
+  firebase_auth: ^6.1.3
+  firebase_messaging: ^16.1.0
+  package_info_plus: ^9.0.0
+  flutter_phoenix: ^1.1.1
+  cached_network_image: ^3.4.1
+  firebase_crashlytics: ^5.0.6
+  webview_flutter: ^4.13.0
+  share_plus: ^12.0.1
+  pdf: ^3.11.3
+  printing: ^5.14.2
+  image_picker: ^1.2.1
+  flutter_exif_rotation: ^0.5.2
+  flutter_image_compress: ^2.4.0
+  flutter_file_dialog: ^3.0.3
+  android_intent_plus: ^6.0.0
+  open_filex: ^4.7.0
+  syncfusion_flutter_charts: ^32.1.24
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_launcher_icons: ^0.13.1
+
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/images/anthropic2.png"
+
+  # The "flutter_lints" package below contains a set of recommended lints to
+  # encourage good coding practices. The lint set provided by the package is
+  # activated in the `analysis_options.yaml` file located at the root of your
+  # package. See that file for information about deactivating specific lint
+  # rules and activating additional ones.
+  flutter_lints: ^5.0.0
+
+# For information on the generic Dart part of this file, see the
+# following page: https://dart.dev/tools/pub/pubspec
+
+# The following section is specific to Flutter packages.
+flutter:
+
+  # The following line ensures that the Material Icons font is
+  # included with your application, so that you can use the icons in
+  # the material Icons class.
+  uses-material-design: true
+
+  # To add assets to your application, add an assets section, like this:
+  assets:
+      - assets/images/splashcreen2.gif
+      - assets/images/logo1.png
+      - assets/images/inventory_mgmt.png
+      - assets/images/inventory.jpeg
+      - assets/images/qb.png
+      - assets/images/scholarship_mgmt.png
+      - assets/images/staff_attendance_mgmt.png
+      - assets/images/staff_filter_mgmt.png
+      - assets/images/stud_enquiry.png
+      - assets/images/student_attendance_mgmt.png
+      - assets/images/student_fee_mgmt.png
+      - assets/images/student_filter_mgmt.png
+      - assets/images/teacher_login.png
+      - assets/images/exams_mgmt.png
+      - assets/images/library_mgmt.png
+      - assets/images/finance_mgmt.png
+      - assets/images/bba.png
+      - assets/images/bca.png
+      - assets/images/bhms.png
+      - assets/images/cbse.png
+      - assets/images/diploma.png
+      - assets/images/high_school.png
+      - assets/images/iti.png
+      - assets/images/inst3d.png
+      - assets/images/masters.png
+      - assets/images/mba.png
+      - assets/images/nursing.png
+      - assets/images/puc.png
+      - assets/images/right.png
+      - assets/images/school.png
+      - assets/images/wrong.png
+      - assets/images/teacher_login.png
+      - assets/images/abtus.jpg
+      - assets/images/ai.png
+      - assets/images/ai2.png
+      - assets/images/blub.png
+      - assets/images/classroom.png
+      - assets/images/damage.png
+      - assets/images/dead_stk.png
+      - assets/images/ic_user_background.jpg
+      - assets/images/images.png
+      - assets/images/invt.png
+      - assets/images/logo.jpg
+      - assets/images/map.png
+      - assets/images/notistd.png
+      - assets/images/off_line_exam.png
+      - assets/images/onleave_staff.png
+      - assets/images/online_exam.png
+      - assets/images/pdf_icon.png
+      - assets/images/placeholder.png
+      - assets/images/punched_staff.png
+      - assets/images/qr_code_icon.png
+      - assets/images/results.png
+      - assets/images/right.png
+      - assets/images/search_icon.png
+      - assets/images/splashcreen2.gif
+      - assets/images/sync.png
+      - assets/images/teacher_login.png
+      - assets/images/tot_staff.png
+      - assets/images/unpunched_staff.png
+      - assets/images/wrong.png
+      - assets/images/br_next_icon.png
+      - assets/images/ic_menu_add.png
+      - assets/images/ic_menu_edit.png
+      - assets/images/ic_menu_eye.png
+      - assets/images/ic_menu_phone.png
+      - assets/images/ic_user_background.jpg
+      - assets/images/SocialSkills.jpg
+      - assets/images/assessmnt.png
+      - assets/images/busimage.png
+      - assets/images/digital-library.png
+      - assets/images/document-management.jpg
+      - assets/images/fee-detail.png
+      - assets/images/homework-icon-21.jpg
+      - assets/images/online-exam.webp
+      - assets/images/placement.png
+      - assets/images/scoler.png
+      - assets/images/statastic.png
+      - assets/images/syllabus.jpg
+      - assets/images/timetable.png
+      - assets/images/exam_8750666.png
+      - assets/images/ask-question.png
+      - assets/images/Syllabus.png
+      - assets/images/bus-icon-png.png
+      - assets/images/BUS.png
+      - assets/images/syllabus-icon-14.jpg
+      - assets/images/bnr_wish.png
+      - assets/images/birth_day.gif
+      - assets/images/att_logo.png
+      - assets/images/exam_erformance.png
+      - assets/images/home_works.png
+      - assets/images/school_bus.png
+      - assets/images/social_skills.png
+      - assets/images/libb.png
+      - assets/images/timetable.png
+      - assets/images/online_exam.png
+      - assets/images/anthropic2.png
+      
+
+
+  # An image asset can refer to one or more resolution-specific "variants", see
+  # https://flutter.dev/to/resolution-aware-images
+
+  # For details regarding adding assets from package dependencies, see
+  # https://flutter.dev/to/asset-from-package
+
+  # To add custom fonts to your application, add a fonts section here,
+  # in this "flutter" section. Each entry in this list should have a
+  # "family" key with the font family name, and a "fonts" key with a
+  # list giving the asset and other descriptors for the font. For
+  # example:
+  # fonts:
+  #   - family: Schyler
+  #     fonts:
+  #       - asset: fonts/Schyler-Regular.ttf
+  #       - asset: fonts/Schyler-Italic.ttf
+  #         style: italic
+  #   - family: Trajan Pro
+  #     fonts:
+  #       - asset: fonts/TrajanPro.ttf
+  #       - asset: fonts/TrajanPro_Bold.ttf
+  #         weight: 700
+  #
+  # For details regarding fonts from package dependencies,
+  # see https://flutter.dev/to/font-from-package

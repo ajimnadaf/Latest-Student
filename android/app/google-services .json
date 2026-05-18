@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "1001597177545",
+    "firebase_url": "https://tgstudentapp.firebaseio.com",
+    "project_id": "tgstudentapp",
+    "storage_bucket": "tgstudentapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1001597177545:android:1506a8146f86e080",
+        "android_client_info": {
+          "package_name": "com.example.student_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1001597177545-div36rvlc4s16oivir1gtava64eujef3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBTNBpMqirFXpSJ_dWvV0k4xe8B3IPokUI"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
