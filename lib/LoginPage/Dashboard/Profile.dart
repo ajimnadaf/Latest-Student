@@ -9,7 +9,7 @@ import 'package:student_app/LoginPage/Dashboard/BasicDetails.dart';
 import 'package:student_app/LoginPage/Dashboard/AcademicDetails.dart';
 import 'package:student_app/LoginPage/Dashboard/SchlorshipDetails.dart';
 import 'package:student_app/LoginPage/Dashboard/HealthDetails.dart';
-import 'package:student_app/LoginPage/Dashboard/social_skill.dart';
+import 'package:student_app/studentfeautures/SocialSkills.dart';
 
 // --- I. DATA STATUS ENUM ---
 enum ProfileDataStatus { initial, loading, loaded, error, connectionError }
@@ -101,7 +101,9 @@ class _StudentProfilePageState extends State<StudentProfilePage> {
       _status = ProfileDataStatus.error;
       _errorMessage = "Connection Failed: ${e.toString()}";
     } finally {
-      setState(() {});
+      if (mounted) {
+        setState(() {});
+      }
     }
   }
 
@@ -149,6 +151,7 @@ class _StudentProfilePageState extends State<StudentProfilePage> {
     } catch (e) {
       Fluttertoast.showToast(msg: "System Error: Update Failed", backgroundColor: Colors.red);
     } finally {
+      if (!mounted) return;
       setState(() => _status = ProfileDataStatus.loaded);
     }
   }
@@ -228,31 +231,38 @@ class _StudentProfilePageState extends State<StudentProfilePage> {
                 title: "Update Basic Details",
                 icon: Icons.person_outline,
                 iconColor: primaryBlue,
-                onTap: () => UpdateBasicDetailsPopup.show,
+                onTap: () => UpdateBasicDetailsPopup.show(context),
               ),
               _buildUpdateCard(
                 title: "Update Educational Details",
                 icon: Icons.school_outlined,
                 iconColor: academicTeal,
-                onTap: () => AcademicDetailsPopup.show,
+                onTap: () => AcademicDetailsPopup.show(context),
               ),
               _buildUpdateCard(
                 title: "Update Scholarship Details",
                 icon: Icons.workspace_premium_outlined,
                 iconColor: academicTeal,
-                onTap: () => ScholarshipDetailsPopup.show,
+                onTap: () => ScholarshipDetailsPopup.show(context),
               ),
               _buildUpdateCard(
                 title: "Update Health Details",
                 icon: Icons.favorite_outline,
                 iconColor: healthRed,
-                onTap: () => HealthDetailsPopup.show,
+                onTap: () => HealthDetailsPopup.show(context),
               ),
               _buildUpdateCard(
                 title: "Social & Skills",
                 icon: Icons.psychology_outlined,
                 iconColor: Colors.purple,
-                onTap: () => Navigator.push,
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => const SocialSkill(),
+                    ),
+                  );
+                },
               ),
               const SizedBox(height: 20),
             ],
@@ -260,7 +270,7 @@ class _StudentProfilePageState extends State<StudentProfilePage> {
         ),
         if (_status == ProfileDataStatus.loading)
           Container(
-            color: Colors.black26,
+            color: Colors.black.withOpacity(0.15),
             child: const Center(child: CircularProgressIndicator()),
           )
       ],

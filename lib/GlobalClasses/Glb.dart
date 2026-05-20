@@ -98,6 +98,7 @@ String height = "";
 String weight = "";
 String tot_max_mark = "";
 String tot_obt_mark = "";
+String cnts = "";
 String exam_id_curr = "";
 String ToteachFilename = "";
 String responce = "";

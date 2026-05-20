@@ -193,14 +193,14 @@ class _HorizonatralchartState extends State<Horizonatralchart> {
       if (responce.startsWith("ErrorCode#2")) {
         //return "NODATA";
       }
-      if (responce.startsWith("record")) {
+      if (responce.startsWith("record#")) {
         Map<String, List<String>> data = processRecords(responce);
-        String cnts = data['X^1_1_']![0];
+        Glb.cnts = data['X^1_1_']![0];
 
-        print("cnts: $cnts");
+        print("cnts: ${Glb.cnts}");
       }
 
-      if (cnts.toUpperCase() == "1") {
+      if (Glb.cnts.toUpperCase() == "1") {
         return "NOTALLOWD";
       }
     }

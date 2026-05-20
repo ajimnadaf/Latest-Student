@@ -12,75 +12,10 @@ import 'package:student_app/studentfeautures/GenerateFullMatrixPerfrm%20.dart';
 import 'package:student_app/studentfeautures/Home_work.dart';
 import 'package:student_app/studentfeautures/SocialSkills.dart';
 
-SocketService socketService = SocketService();
-
-String flag = "", bnr_msg = "", bnr_Usrname = "", dob = "";
-String cur_date = "";
-String tot_HW_given1 = "";
-String cons_today_att = "";
-String seven_days_text = "";
-String tilldate_text = "";
-String remark_cond = "";
-String remark_cond_1 = "", tmp = "";
-String demand = "";
-String credit = "";
-String debit = "";
-String libid = "";
-String fine = "";
-String lib = "";
-String finetxt = "";
-String feeContent = "";
-String tot_fine = "";
-String cnts = "";
-String Positions = "";
-String selectStudent = "";
-
-String InstituteName = "";
-String Secid = "";
-
-bool isLoading = false;
-
-// DUMMY
-String todayAttendance = "";
-String sevenDaysText = "";
-String tillDateText = "";
-String homeworkText = "";
-String examText = "";
-String busLocation = "";
-
-int tot_HW_given = 0;
-int tot_hw_done = 0;
-
-List non_cons_tot__today_lst = [],
-    non_cons_tot_today_attended_lst = [],
-    non_cons_tot_7days_lst = [],
-    non_cons_tot_7days_attended_lst = [],
-    non_cons_tot_till_lst = [],
-    non_cons_tot_till_attended_lst = [],
-    cons_today_display_lst = [],
-    cons_last_7_days_lst = [],
-    cons_till_date_lst = [],
-    cons_till_date_att_lst = [];
-
-List wishid_lst = [], occasion_lst = [], link_lst = [], dt_lst = [];
-List noticeid_Lst = [], notice_Lst = [], notice_link_Lst = [];
-List cons_attended_7_days_lst = [];
-List heads_1 = [], heads_2 = [];
-List cons_7days_display_lst = [], cons_till_date_display_lst = [];
-List new_heads = [];
-List accno_Lst = [],
-    bname_Lst = [],
-    author_Lst = [],
-    edition_Lst = [],
-    issuedate_Lst = [],
-    duedate_Lst = [];
-
 class CountObj {
   int tot_classis = 0;
   int att_classis = 0;
 }
-
-SplayTreeMap<String, CountObj> countMap = SplayTreeMap<String, CountObj>();
 
 class StudentDashboard extends StatefulWidget {
   const StudentDashboard({super.key});
@@ -111,6 +46,96 @@ Map<String, List<String>> processRecords(String input) {
 }
 
 class _StudentDashboardState extends State<StudentDashboard> {
+
+  // ===================== SOCKET =====================
+  final SocketService socketService = SocketService();
+
+  // ===================== FLAGS =====================
+  String flag = "";
+  String bnr_msg = "";
+  String bnr_Usrname = "";
+  String dob = "";
+  String cur_date = "";
+  String tot_HW_given1 = "";
+  String cons_today_att = "";
+  String seven_days_text = "";
+  String tilldate_text = "";
+  String remark_cond = "";
+  String remark_cond_1 = "";
+  String tmp = "";
+  String demand = "";
+  String credit = "";
+  String debit = "";
+  String libid = "";
+  String fine = "";
+  String lib = "";
+  String finetxt = "";
+  String feeContent = "";
+  String tot_fine = "";
+  String Positions = "";
+  String selectStudent = "";
+  String InstituteName = "";
+  String Secid = "";
+
+  // ===================== LOADING =====================
+  bool isLoading = false;
+
+  // ===================== DISPLAY STRINGS =====================
+  String todayAttendance = "";
+  String sevenDaysText = "";
+  String tillDateText = "";
+  String homeworkText = "";
+  String examText = "";
+  String busLocation = "";
+
+  // ===================== COUNTERS =====================
+  int tot_HW_given = 0;
+  int tot_hw_done = 0;
+
+  // ===================== ATTENDANCE LISTS =====================
+  List non_cons_tot__today_lst = [];
+  List non_cons_tot_today_attended_lst = [];
+  List non_cons_tot_7days_lst = [];
+  List non_cons_tot_7days_attended_lst = [];
+  List non_cons_tot_till_lst = [];
+  List non_cons_tot_till_attended_lst = [];
+  List cons_today_display_lst = [];
+  List cons_last_7_days_lst = [];
+  List cons_till_date_lst = [];
+  List cons_till_date_att_lst = [];
+  List cons_attended_7_days_lst = [];
+  List cons_7days_display_lst = [];
+  List cons_till_date_display_lst = [];
+
+  // ===================== WISH LISTS =====================
+  List wishid_lst = [];
+  List occasion_lst = [];
+  List link_lst = [];
+  List dt_lst = [];
+
+  // ===================== NOTICE LISTS =====================
+  List noticeid_Lst = [];
+  List notice_Lst = [];
+  List notice_link_Lst = [];
+
+  // ===================== FEE HEADS =====================
+  List heads_1 = [];
+  List heads_2 = [];
+  List new_heads = [];
+
+  // ===================== LIBRARY LISTS =====================
+  List accno_Lst = [];
+  List bname_Lst = [];
+  List author_Lst = [];
+  List edition_Lst = [];
+  List issuedate_Lst = [];
+  List duedate_Lst = [];
+
+  // ===================== COUNT MAP =====================
+  SplayTreeMap<String, CountObj> countMap = SplayTreeMap<String, CountObj>();
+
+  // ===================== INIT =====================
+  @override
   void initState() {
     super.initState();
     get();
@@ -157,16 +182,16 @@ class _StudentDashboardState extends State<StudentDashboard> {
               Glb.sec_id +
               "' and psubtbl.subid= tattendencetbl.subid";
       print("Query : $query");
-      String responce =
+      String response =
           await socketService.sendMessage(Glb.ip, Glb.port, query, 709);
-      if (responce.startsWith("Err:")) {
+      if (response.startsWith("Err:")) {
         return "ERROR";
       }
-      if (responce.startsWith("ErrorCode#2")) {
+      if (response.startsWith("ErrorCode#2")) {
         non_cons_tot__today_lst = [];
         return "NODATA";
       }
-      if (responce.startsWith("record#")) {
+      if (response.startsWith("record#")) {
         Map<String, List<String>> data = processRecords(response);
         non_cons_tot__today_lst = data['X^1_1'] ?? [];
         print("non_cons_tot__today_lst: $non_cons_tot__today_lst");
@@ -187,15 +212,15 @@ class _StudentDashboardState extends State<StudentDashboard> {
               Glb.student_id +
               "'";
       print("Query: $query");
-      responce = await socketService.sendMessage(Glb.ip, Glb.port, query, 709);
-      if (responce.startsWith("Err:")) {
+      response = await socketService.sendMessage(Glb.ip, Glb.port, query, 709);
+      if (response.startsWith("Err:")) {
         return "ERROR";
       }
-      if (responce.startsWith("ErrorCode#2")) {
+      if (response.startsWith("ErrorCode#2")) {
         non_cons_tot_today_attended_lst = [];
         return "NODATA";
       }
-      if (responce.startsWith("record#")) {
+      if (response.startsWith("record#")) {
         Map<String, List<String>> data = processRecords(response);
         non_cons_tot_today_attended_lst = data['X^1_1'] ?? [];
         print(
@@ -216,16 +241,16 @@ class _StudentDashboardState extends State<StudentDashboard> {
               Glb.sec_id +
               "' and psubtbl.subid= tattendencetbl.subid";
       print("Query : $query");
-      String responce =
+      String response =
           await socketService.sendMessage(Glb.ip, Glb.port, query, 709);
-      if (responce.startsWith("Err:")) {
+      if (response.startsWith("Err:")) {
         return "ERROR";
       }
-      if (responce.startsWith("ErrorCode#2")) {
+      if (response.startsWith("ErrorCode#2")) {
         non_cons_tot_7days_lst = [];
         return "NODATA";
       }
-      if (responce.startsWith("record#")) {
+      if (response.startsWith("record#")) {
         Map<String, List<String>> data = processRecords(response);
         non_cons_tot_7days_lst = data['X^1_1'] ?? [];
         print("non_cons_tot_7days_lst: $non_cons_tot_7days_lst");
@@ -245,15 +270,15 @@ class _StudentDashboardState extends State<StudentDashboard> {
           Glb.student_id +
           "'";
       print("Query: $query");
-      responce = await socketService.sendMessage(Glb.ip, Glb.port, query, 709);
-      if (responce.startsWith("Err:")) {
+      response = await socketService.sendMessage(Glb.ip, Glb.port, query, 709);
+      if (response.startsWith("Err:")) {
         return "ERROR";
       }
-      if (responce.startsWith("ErrorCode#2")) {
+      if (response.startsWith("ErrorCode#2")) {
         non_cons_tot_7days_attended_lst = [];
         return "NODATA";
       }
-      if (responce.startsWith("record#")) {
+      if (response.startsWith("record#")) {
         Map<String, List<String>> data = processRecords(response);
         non_cons_tot_7days_attended_lst = data['X^1_1'] ?? [];
         print(
@@ -276,16 +301,16 @@ class _StudentDashboardState extends State<StudentDashboard> {
               Glb.sec_id +
               "' and psubtbl.subid= tattendencetbl.subid";
       print("Query : $query");
-      String responce =
+      String response =
           await socketService.sendMessage(Glb.ip, Glb.port, query, 709);
-      if (responce.startsWith("Err:")) {
+      if (response.startsWith("Err:")) {
         return "ERROR";
       }
-      if (responce.startsWith("ErrorCode#2")) {
+      if (response.startsWith("ErrorCode#2")) {
         non_cons_tot_till_lst = [];
         return "NODATA";
       }
-      if (responce.startsWith("record#")) {
+      if (response.startsWith("record#")) {
         Map<String, List<String>> data = processRecords(response);
         non_cons_tot_till_lst = data['X^1_1'] ?? [];
         print("non_cons_tot_till_lst: $non_cons_tot_till_lst");
@@ -307,15 +332,15 @@ class _StudentDashboardState extends State<StudentDashboard> {
               "tattendencetbl.batchid='" +
               Glb.active_batchid +
               "' group  by attendid,subname";
-      responce = await socketService.sendMessage(Glb.ip, Glb.port, query, 709);
-      if (responce.startsWith("Err:")) {
+      response = await socketService.sendMessage(Glb.ip, Glb.port, query, 709);
+      if (response.startsWith("Err:")) {
         return "ERROR";
       }
-      if (responce.startsWith("ErrorCode#2")) {
+      if (response.startsWith("ErrorCode#2")) {
         non_cons_tot_till_attended_lst = [];
         return "NODATA";
       }
-      if (responce.startsWith("record#")) {
+      if (response.startsWith("record#")) {
         Map<String, List<String>> data = processRecords(response);
         non_cons_tot_till_attended_lst = data['X^1_1'] ?? [];
         print(
@@ -359,7 +384,7 @@ class _StudentDashboardState extends State<StudentDashboard> {
           if (cons_today_display_lst != null &&
               cons_today_display_lst.isNotEmpty) {
             print("cons_today_display_lst: $cons_today_display_lst");
-            //showPopup(cons_today_display_lst);
+            showDataDialog(context, cons_today_display_lst);
           }
         }
       }
@@ -402,7 +427,7 @@ class _StudentDashboardState extends State<StudentDashboard> {
           if (cons_today_display_lst != null &&
               cons_today_display_lst.isNotEmpty) {
             print("cons_today_display_lst: $cons_today_display_lst");
-            //showPopup(cons_today_display_lst);
+            showDataDialog(context, cons_today_display_lst);
           }
         }
       }
@@ -446,7 +471,7 @@ class _StudentDashboardState extends State<StudentDashboard> {
           if (cons_today_display_lst != null &&
               cons_today_display_lst.isNotEmpty) {
             print("cons_today_display_lst: $cons_today_display_lst");
-            // showPopup(cons_today_display_lst);
+            showDataDialog(context, cons_today_display_lst);
           }
         }
       }
@@ -465,16 +490,16 @@ class _StudentDashboardState extends State<StudentDashboard> {
             Glb.classid +
             "' ";
     print("Query : $query");
-    String responce =
+    String response =
         await socketService.sendMessage(Glb.ip, Glb.port, query, 709);
-    if (responce.startsWith("Err:")) {
+    if (response.startsWith("Err:")) {
       return "ERROR";
     }
-    if (responce.startsWith("ErrorCode#2")) {
+    if (response.startsWith("ErrorCode#2")) {
       // return "NODATA";
     }
-    if (responce.startsWith("record#")) {
-      Map<String, List<String>> data = processRecords(responce);
+    if (response.startsWith("record#")) {
+      Map<String, List<String>> data = processRecords(response);
       bnr_msg = data['X^1_1']![0];
       bnr_Usrname = data['X^1_1']![0];
       print("bnr_msg: $bnr_msg  bnr_Usrname: $bnr_Usrname");
@@ -484,30 +509,30 @@ class _StudentDashboardState extends State<StudentDashboard> {
         Glb.userid +
         "' ";
     print("Query : $query");
-    responce = await socketService.sendMessage(Glb.ip, Glb.port, query, 709);
-    if (responce.startsWith("Err:")) {
+    response = await socketService.sendMessage(Glb.ip, Glb.port, query, 709);
+    if (response.startsWith("Err:")) {
       return "ERROR";
     }
-    if (responce.startsWith("ErrorCode#2")) {
+    if (response.startsWith("ErrorCode#2")) {
       // return "NODATA";
     }
-    if (responce.startsWith("record#")) {
-      Map<String, List<String>> data = processRecords(responce);
+    if (response.startsWith("record#")) {
+      Map<String, List<String>> data = processRecords(response);
       dob = data['X^1_1']![0];
       print("dob: $dob");
     }
 
     query = "select wishid,occasion,link,dt from trueguide.twishtbl ";
     print("Query : $query");
-    responce = await socketService.sendMessage(Glb.ip, Glb.port, query, 709);
-    if (responce.startsWith("Err:")) {
+    response = await socketService.sendMessage(Glb.ip, Glb.port, query, 709);
+    if (response.startsWith("Err:")) {
       return "ERROR";
     }
-    if (responce.startsWith("ErrorCode#2")) {
+    if (response.startsWith("ErrorCode#2")) {
       // return "NODATA";
     }
-    if (responce.startsWith("record#")) {
-      Map<String, List<String>> data = processRecords(responce);
+    if (response.startsWith("record#")) {
+      Map<String, List<String>> data = processRecords(response);
       wishid_lst = data['X^1_1'] ?? [];
       occasion_lst = data['X^2_2'] ?? [];
       link_lst = data['X^3_3'] ?? [];
@@ -524,15 +549,15 @@ class _StudentDashboardState extends State<StudentDashboard> {
         Glb.inst_id +
         "' and status='1'";
     print("Query : $query");
-    responce = await socketService.sendMessage(Glb.ip, Glb.port, query, 709);
-    if (responce.startsWith("Err:")) {
+    response = await socketService.sendMessage(Glb.ip, Glb.port, query, 709);
+    if (response.startsWith("Err:")) {
       return "ERROR";
     }
-    if (responce.startsWith("ErrorCode#2")) {
+    if (response.startsWith("ErrorCode#2")) {
       // return "NODATA";
     }
-    if (responce.startsWith("record#")) {
-      Map<String, List<String>> data = processRecords(responce);
+    if (response.startsWith("record#")) {
+      Map<String, List<String>> data = processRecords(response);
       noticeid_Lst = data['X^1_1'] ?? [];
       notice_Lst = data['X^2_2'] ?? [];
       notice_link_Lst = data['X^3_3'] ?? [];
@@ -553,15 +578,15 @@ class _StudentDashboardState extends State<StudentDashboard> {
         Glb.sec_id +
         "'";
     print("Query : $query");
-    responce = await socketService.sendMessage(Glb.ip, Glb.port, query, 709);
-    if (responce.startsWith("Err:")) {
+    response = await socketService.sendMessage(Glb.ip, Glb.port, query, 709);
+    if (response.startsWith("Err:")) {
       return "ERROR";
     }
-    if (responce.startsWith("ErrorCode#2")) {
+    if (response.startsWith("ErrorCode#2")) {
       // return "NODATA";
     }
-    if (responce.startsWith("record#")) {
-      Map<String, List<String>> data = processRecords(responce);
+    if (response.startsWith("record#")) {
+      Map<String, List<String>> data = processRecords(response);
       tot_HW_given1 = data['X^1_1']![0];
       tot_HW_given = int.parse(tot_HW_given1);
 
@@ -585,15 +610,15 @@ class _StudentDashboardState extends State<StudentDashboard> {
           Glb.student_id +
           "'";
       print("Query : $query");
-      responce = await socketService.sendMessage(Glb.ip, Glb.port, query, 709);
-      if (responce.startsWith("Err:")) {
+      response = await socketService.sendMessage(Glb.ip, Glb.port, query, 709);
+      if (response.startsWith("Err:")) {
         return "ERROR";
       }
-      if (responce.startsWith("ErrorCode#2")) {
+      if (response.startsWith("ErrorCode#2")) {
         // return "NODATA";
       }
-      if (responce.startsWith("record#")) {
-        Map<String, List<String>> data = processRecords(responce);
+      if (response.startsWith("record#")) {
+        Map<String, List<String>> data = processRecords(response);
         String tot_hw_done1 = data['X^1_1']![0];
         tot_hw_done = int.parse(tot_hw_done1);
 
@@ -614,22 +639,24 @@ class _StudentDashboardState extends State<StudentDashboard> {
           Glb.sec_id +
           "'";
       print("Query : $query");
-      responce = await socketService.sendMessage(Glb.ip, Glb.port, query, 709);
-      if (responce.startsWith("Err:")) {
+      response = await socketService.sendMessage(Glb.ip, Glb.port, query, 709);
+      if (response.startsWith("Err:")) {
         return "ERROR";
       }
-      if (responce.startsWith("ErrorCode#2")) {
+      if (response.startsWith("ErrorCode#2")) {
         cons_today_att = "Not Taken";
         // return "NODATA";
       }
-      if (responce.startsWith("record#")) {
-        Map<String, List<String>> data = processRecords(responce);
-        String status = data['X^1_1']![0];
-        if (status.toUpperCase == "0") {
+      if (response.startsWith("record#")) {
+        Map<String, List<String>> data = processRecords(response);
+        String status = data['X^1_1']![0].trim();
+
+        if (status.toUpperCase() == "0") { 
           cons_today_att = "Absent";
-        }
-        if (status.toUpperCase() == "1") {
+        } else if (status.toUpperCase() == "1") { 
           cons_today_att = "Present";
+        } else {
+          cons_today_att = "Not Taken";
         }
 
         print("notice_link_Lst: $cons_today_att");
@@ -648,16 +675,16 @@ class _StudentDashboardState extends State<StudentDashboard> {
               Glb.sec_id +
               "' ";
       print("Query : $query");
-      responce = await socketService.sendMessage(Glb.ip, Glb.port, query, 709);
-      if (responce.startsWith("Err:")) {
+      response = await socketService.sendMessage(Glb.ip, Glb.port, query, 709);
+      if (response.startsWith("Err:")) {
         return "ERROR";
       }
-      if (responce.startsWith("ErrorCode#2")) {
+      if (response.startsWith("ErrorCode#2")) {
         seven_days_text = "Last 7 Days' Attendance : Not Taken";
         // return "NODATA";
       }
-      if (responce.startsWith("record#")) {
-        Map<String, List<String>> data = processRecords(responce);
+      if (response.startsWith("record#")) {
+        Map<String, List<String>> data = processRecords(response);
         cons_last_7_days_lst = data['X^1_1'] ?? [];
         seven_days_text =
             "Last 7 Days' Attendance : 0 / ${cons_last_7_days_lst.length}";
@@ -680,11 +707,11 @@ class _StudentDashboardState extends State<StudentDashboard> {
           Glb.student_id +
           "'  and status = '1'";
       print("Query : $query");
-      responce = await socketService.sendMessage(Glb.ip, Glb.port, query, 709);
-      if (responce.startsWith("Err:")) {
+      response = await socketService.sendMessage(Glb.ip, Glb.port, query, 709);
+      if (response.startsWith("Err:")) {
         return "ERROR";
       }
-      if (responce.startsWith("ErrorCode#2")) {
+      if (response.startsWith("ErrorCode#2")) {
         if (cons_last_7_days_lst != null) {
           seven_days_text =
               "Last 7 Days' Attendance : 0 / ${cons_last_7_days_lst.length}";
@@ -693,8 +720,8 @@ class _StudentDashboardState extends State<StudentDashboard> {
         }
         // return "NODATA";
       }
-      if (responce.startsWith("record#")) {
-        Map<String, List<String>> data = processRecords(responce);
+      if (response.startsWith("record#")) {
+        Map<String, List<String>> data = processRecords(response);
         cons_attended_7_days_lst = data['X^1_1'] ?? [];
         seven_days_text =
             "Last 7 Days' Attendance : ${cons_attended_7_days_lst.length} / ${cons_last_7_days_lst.length}";
@@ -715,16 +742,16 @@ class _StudentDashboardState extends State<StudentDashboard> {
               "'" +
               " group by attdate order by attdate";
       print("Query : $query");
-      responce = await socketService.sendMessage(Glb.ip, Glb.port, query, 709);
-      if (responce.startsWith("Err:")) {
+      response = await socketService.sendMessage(Glb.ip, Glb.port, query, 709);
+      if (response.startsWith("Err:")) {
         return "ERROR";
       }
-      if (responce.startsWith("ErrorCode#2")) {
+      if (response.startsWith("ErrorCode#2")) {
         tilldate_text = "Till Date Attendance : Not Taken";
         // return "NODATA";
       }
-      if (responce.startsWith("record#")) {
-        Map<String, List<String>> data = processRecords(responce);
+      if (response.startsWith("record#")) {
+        Map<String, List<String>> data = processRecords(response);
         cons_till_date_lst = data['X^1_1'] ?? [];
         print("cons_till_date_lst: $cons_till_date_lst");
       }
@@ -745,11 +772,11 @@ class _StudentDashboardState extends State<StudentDashboard> {
           Glb.student_id +
           "' and status = '1' group by attdate order by attdate";
       print("Query : $query");
-      responce = await socketService.sendMessage(Glb.ip, Glb.port, query, 709);
-      if (responce.startsWith("Err:")) {
+      response = await socketService.sendMessage(Glb.ip, Glb.port, query, 709);
+      if (response.startsWith("Err:")) {
         return "ERROR";
       }
-      if (responce.startsWith("ErrorCode#2")) {
+      if (response.startsWith("ErrorCode#2")) {
         if (cons_till_date_lst != null) {
           tilldate_text =
               "Till Date Attendance : 0/ ${cons_till_date_lst.length}";
@@ -758,8 +785,8 @@ class _StudentDashboardState extends State<StudentDashboard> {
         }
         //return "NODATA";
       }
-      if (responce.startsWith("record#")) {
-        Map<String, List<String>> data = processRecords(responce);
+      if (response.startsWith("record#")) {
+        Map<String, List<String>> data = processRecords(response);
         cons_till_date_att_lst = data['X^1_1'] ?? [];
         tilldate_text =
             "Till Date Attendance : ${cons_till_date_att_lst.length} / ${cons_till_date_lst.length}";
@@ -779,16 +806,16 @@ class _StudentDashboardState extends State<StudentDashboard> {
               Glb.sec_id +
               "' and psubtbl.subid= tattendencetbl.subid";
       print("Query : $query");
-      responce = await socketService.sendMessage(Glb.ip, Glb.port, query, 709);
-      if (responce.startsWith("Err:")) {
+      response = await socketService.sendMessage(Glb.ip, Glb.port, query, 709);
+      if (response.startsWith("Err:")) {
         return "ERROR";
       }
-      if (responce.startsWith("ErrorCode#2")) {
+      if (response.startsWith("ErrorCode#2")) {
         non_cons_tot__today_lst = [];
         //   return "NODATA";
       }
-      if (responce.startsWith("record#")) {
-        Map<String, List<String>> data = processRecords(responce);
+      if (response.startsWith("record#")) {
+        Map<String, List<String>> data = processRecords(response);
         cons_till_date_att_lst = data['X^1_1'] ?? [];
 
         print("cons_till_date_lst: $non_cons_tot__today_lst");
@@ -809,16 +836,16 @@ class _StudentDashboardState extends State<StudentDashboard> {
               Glb.student_id +
               "'";
       print("Query : $query");
-      responce = await socketService.sendMessage(Glb.ip, Glb.port, query, 709);
-      if (responce.startsWith("Err:")) {
+      response = await socketService.sendMessage(Glb.ip, Glb.port, query, 709);
+      if (response.startsWith("Err:")) {
         return "ERROR";
       }
-      if (responce.startsWith("ErrorCode#2")) {
+      if (response.startsWith("ErrorCode#2")) {
         non_cons_tot_today_attended_lst = [];
         // return "NODATA";
       }
-      if (responce.startsWith("record#")) {
-        Map<String, List<String>> data = processRecords(responce);
+      if (response.startsWith("record#")) {
+        Map<String, List<String>> data = processRecords(response);
         non_cons_tot_today_attended_lst = data['X^1_1'] ?? [];
 
         print("cons_till_date_lst: $non_cons_tot_today_attended_lst");
@@ -835,16 +862,16 @@ class _StudentDashboardState extends State<StudentDashboard> {
           Glb.sec_id +
           "' and psubtbl.subid= tattendencetbl.subid";
       print("Query : $query");
-      responce = await socketService.sendMessage(Glb.ip, Glb.port, query, 709);
-      if (responce.startsWith("Err:")) {
+      response = await socketService.sendMessage(Glb.ip, Glb.port, query, 709);
+      if (response.startsWith("Err:")) {
         return "ERROR";
       }
-      if (responce.startsWith("ErrorCode#2")) {
+      if (response.startsWith("ErrorCode#2")) {
         non_cons_tot_7days_lst = [];
         //  return "NODATA";
       }
-      if (responce.startsWith("record#")) {
-        Map<String, List<String>> data = processRecords(responce);
+      if (response.startsWith("record#")) {
+        Map<String, List<String>> data = processRecords(response);
         non_cons_tot_7days_lst = data['X^1_1'] ?? [];
 
         print("cons_till_date_lst: $non_cons_tot_7days_lst");
@@ -863,16 +890,16 @@ class _StudentDashboardState extends State<StudentDashboard> {
           Glb.student_id +
           "'";
       print("Query : $query");
-      responce = await socketService.sendMessage(Glb.ip, Glb.port, query, 709);
-      if (responce.startsWith("Err:")) {
+      response = await socketService.sendMessage(Glb.ip, Glb.port, query, 709);
+      if (response.startsWith("Err:")) {
         return "ERROR";
       }
-      if (responce.startsWith("ErrorCode#2")) {
+      if (response.startsWith("ErrorCode#2")) {
         non_cons_tot_7days_attended_lst = [];
         // return "NODATA";
       }
-      if (responce.startsWith("record#")) {
-        Map<String, List<String>> data = processRecords(responce);
+      if (response.startsWith("record#")) {
+        Map<String, List<String>> data = processRecords(response);
         non_cons_tot_7days_attended_lst = data['X^1_1'] ?? [];
 
         print("cons_till_date_lst: $non_cons_tot_7days_attended_lst");
@@ -891,16 +918,16 @@ class _StudentDashboardState extends State<StudentDashboard> {
               Glb.sec_id +
               "' and psubtbl.subid= tattendencetbl.subid";
       print("Query : $query");
-      responce = await socketService.sendMessage(Glb.ip, Glb.port, query, 709);
-      if (responce.startsWith("Err:")) {
+      response = await socketService.sendMessage(Glb.ip, Glb.port, query, 709);
+      if (response.startsWith("Err:")) {
         return "ERROR";
       }
-      if (responce.startsWith("ErrorCode#2")) {
+      if (response.startsWith("ErrorCode#2")) {
         non_cons_tot_till_lst = [];
         // return "NODATA";
       }
-      if (responce.startsWith("record#")) {
-        Map<String, List<String>> data = processRecords(responce);
+      if (response.startsWith("record#")) {
+        Map<String, List<String>> data = processRecords(response);
         non_cons_tot_till_lst = data['X^1_1'] ?? [];
 
         print("cons_till_date_lst: $non_cons_tot_till_lst");
@@ -922,60 +949,31 @@ class _StudentDashboardState extends State<StudentDashboard> {
               Glb.student_id +
               "'";
       print("Query : $query");
-      responce = await socketService.sendMessage(Glb.ip, Glb.port, query, 709);
-      if (responce.startsWith("Err:")) {
+      response = await socketService.sendMessage(Glb.ip, Glb.port, query, 709);
+      if (response.startsWith("Err:")) {
         return "ERROR";
       }
-      if (responce.startsWith("ErrorCode#2")) {
+      if (response.startsWith("ErrorCode#2")) {
         non_cons_tot_till_attended_lst = [];
         // return "NODATA";
       }
-      if (responce.startsWith("record#")) {
-        Map<String, List<String>> data = processRecords(responce);
+      if (response.startsWith("record#")) {
+        Map<String, List<String>> data = processRecords(response);
         non_cons_tot_till_attended_lst = data['X^1_1'] ?? [];
 
         print("cons_till_date_lst: $non_cons_tot_till_attended_lst");
       }
     }
 
-    query =
-        "select  particulars from trueguide.pfeesreceiptparticularstbl where instid='" +
-            Glb.inst_id +
-            "' and showinstudapp='1'";
-    print("Query : $query");
-    responce = await socketService.sendMessage(Glb.ip, Glb.port, query, 709);
-    if (responce.startsWith("Err:")) {
-      return "ERROR";
-    }
-    if (responce.startsWith("ErrorCode#2")) {
-      //non_cons_tot_till_attended_lst = [];
-      //return "NODATA";
-    }
-    if (responce.startsWith("record#")) {
-      Map<String, List<String>> data = processRecords(responce);
+    query = "select particulars from trueguide.pfeesreceiptparticularstbl where instid='" +
+        Glb.inst_id + "' and showinstudapp='1'";
+
+    response = await socketService.sendMessage(Glb.ip, Glb.port, query, 709);
+
+    if (response.startsWith("record#")) {
+      Map<String, List<String>> data = processRecords(response);
       heads_1 = data['X^1_1'] ?? [];
-
-      print("heads_1: $heads_1");
-    }
-
-    query =
-        "select  particulars from trueguide.pfeesreceiptparticularstbl where instid='" +
-            Glb.inst_id +
-            "' and showinstudapp='1'";
-    print("Query : $query");
-    responce = await socketService.sendMessage(Glb.ip, Glb.port, query, 709);
-    if (responce.startsWith("Err:")) {
-      return "ERROR";
-    }
-    if (responce.startsWith("ErrorCode#2")) {
-      //non_cons_tot_till_attended_lst = [];
-      //return "NODATA";
-    }
-    if (responce.startsWith("record#")) {
-      Map<String, List<String>> data = processRecords(responce);
-      heads_2 = data['X^1_1'] ?? [];
-
-      print("heads_2: $heads_2");
+      heads_2 = List.from(heads_1);
     }
 
     for (int i = 0; heads_1 != null && i < heads_1.length; i++) {
@@ -1009,16 +1007,16 @@ class _StudentDashboardState extends State<StudentDashboard> {
             "' and enttype>='2' and del='0' " +
             remark_cond;
     print("Query : $query");
-    responce = await socketService.sendMessage(Glb.ip, Glb.port, query, 709);
-    if (responce.startsWith("Err:")) {
+    response = await socketService.sendMessage(Glb.ip, Glb.port, query, 709);
+    if (response.startsWith("Err:")) {
       return "ERROR";
     }
-    if (responce.startsWith("ErrorCode#2")) {
+    if (response.startsWith("ErrorCode#2")) {
       //non_cons_tot_till_attended_lst = [];
       // return "NODATA";
     }
-    if (responce.startsWith("record#")) {
-      Map<String, List<String>> data = processRecords(responce);
+    if (response.startsWith("record#")) {
+      Map<String, List<String>> data = processRecords(response);
       demand = data['X^1_1']![0];
 
       print("demand: $demand");
@@ -1031,16 +1029,16 @@ class _StudentDashboardState extends State<StudentDashboard> {
             "' and enttype='1' and del='0' " +
             remark_cond_1;
     print("Query : $query");
-    responce = await socketService.sendMessage(Glb.ip, Glb.port, query, 709);
-    if (responce.startsWith("Err:")) {
+    response = await socketService.sendMessage(Glb.ip, Glb.port, query, 709);
+    if (response.startsWith("Err:")) {
       return "ERROR";
     }
-    if (responce.startsWith("ErrorCode#2")) {
+    if (response.startsWith("ErrorCode#2")) {
       //non_cons_tot_till_attended_lst = [];
       // return "NODATA";
     }
-    if (responce.startsWith("record#")) {
-      Map<String, List<String>> data = processRecords(responce);
+    if (response.startsWith("record#")) {
+      Map<String, List<String>> data = processRecords(response);
       credit = data['X^1_1']![0];
 
       print("credit: $credit");
@@ -1053,16 +1051,16 @@ class _StudentDashboardState extends State<StudentDashboard> {
             "' and enttype='0' and del='0' " +
             remark_cond_1;
     print("Query : $query");
-    responce = await socketService.sendMessage(Glb.ip, Glb.port, query, 709);
-    if (responce.startsWith("Err:")) {
+    response = await socketService.sendMessage(Glb.ip, Glb.port, query, 709);
+    if (response.startsWith("Err:")) {
       return "ERROR";
     }
-    if (responce.startsWith("ErrorCode#2")) {
+    if (response.startsWith("ErrorCode#2")) {
       //non_cons_tot_till_attended_lst = [];
       //return "NODATA";
     }
-    if (responce.startsWith("record#")) {
-      Map<String, List<String>> data = processRecords(responce);
+    if (response.startsWith("record#")) {
+      Map<String, List<String>> data = processRecords(response);
       debit = data['X^1_1']![0];
 
       print("debit: $debit");
@@ -1078,16 +1076,16 @@ class _StudentDashboardState extends State<StudentDashboard> {
         Glb.inst_id +
         "')";
     print("Query : $query");
-    responce = await socketService.sendMessage(Glb.ip, Glb.port, query, 709);
-    if (responce.startsWith("Err:")) {
+    response = await socketService.sendMessage(Glb.ip, Glb.port, query, 709);
+    if (response.startsWith("Err:")) {
       return "ERROR";
     }
-    if (responce.startsWith("ErrorCode#2")) {
+    if (response.startsWith("ErrorCode#2")) {
       //non_cons_tot_till_attended_lst = [];
       // return "NODATA";
     }
-    if (responce.startsWith("record#")) {
-      Map<String, List<String>> data = processRecords(responce);
+    if (response.startsWith("record#")) {
+      Map<String, List<String>> data = processRecords(response);
       accno_Lst = data['X^1_1'] ?? [];
       bname_Lst = data['X^2_2'] ?? [];
       author_Lst = data['X^3_3'] ?? [];
@@ -1110,18 +1108,18 @@ class _StudentDashboardState extends State<StudentDashboard> {
       String query =
           "select fine from trueguide.plibrarytbl where libid='" + libid + "'";
       print("String Query: $query");
-      String responce =
+      String response =
           await socketService.sendMessage(Glb.ip, Glb.port, query, 709);
-      if (responce.startsWith("Err:")) {
+      if (response.startsWith("Err:")) {
         return "ERROR";
       }
-      if (responce.startsWith("ErrorCode#2")) {
+      if (response.startsWith("ErrorCode#2")) {
         //non_cons_tot_till_attended_lst = [];
         fine = "0";
         // return "NODATA";
       }
-      if (responce.startsWith("record#")) {
-        Map<String, List<String>> data = processRecords(responce);
+      if (response.startsWith("record#")) {
+        Map<String, List<String>> data = processRecords(response);
         fine = data['X^1_1']![0];
         print("fine => $fine");
       }
@@ -1339,21 +1337,21 @@ class _StudentDashboardState extends State<StudentDashboard> {
             "'";
     print("String Query: $query");
 
-    String responce =
+    String response =
         await socketService.sendMessage(Glb.ip, Glb.port, query, 709);
 
-    if (responce.startsWith("Err:")) {
+    if (response.startsWith("Err:")) {
       return "ERROR";
     }
 
-    if (responce.startsWith("ErrorCode#2")) {
+    if (response.startsWith("ErrorCode#2")) {
       print("nodata");
     }
 
-    if (responce.startsWith("record#")) {
-      Map<String, List<String>> data = processRecords(responce);
-      cnts = data['X^1_1']![0];
-      print("COUNTS TOTAL: $cnts");
+    if (response.startsWith("record#")) {
+      Map<String, List<String>> data = processRecords(response);
+      Glb.cnts = data['X^1_1']![0];
+      print("COUNTS TOTAL: ${Glb.cnts}");
     }
 
     query = "select distinct(examname) from trueguide.texamtbl where instid='" +
@@ -1366,19 +1364,19 @@ class _StudentDashboardState extends State<StudentDashboard> {
         Glb.active_batchid +
         "'";
 
-    responce = await socketService.sendMessage(Glb.ip, Glb.port, query, 709);
+    response = await socketService.sendMessage(Glb.ip, Glb.port, query, 709);
 
-    if (responce.startsWith("Err:")) {
+    if (response.startsWith("Err:")) {
       return "ERROR";
     }
 
-    if (responce.startsWith("ErrorCode#2")) {
+    if (response.startsWith("ErrorCode#2")) {
       print("nodata");
       return "ERROR";
     }
 
-    if (responce.startsWith("record#")) {
-      Map<String, List<String>> data = processRecords(responce);
+    if (response.startsWith("record#")) {
+      Map<String, List<String>> data = processRecords(response);
 
       // ✅ FIX 1: store exam names correctly
       Glb.distinct_examname_lst = data['X^1_1'] ?? [];
@@ -1411,18 +1409,18 @@ class _StudentDashboardState extends State<StudentDashboard> {
 
       print("query : $query");
 
-      responce = await socketService.sendMessage(Glb.ip, Glb.port, query, 709);
+      response = await socketService.sendMessage(Glb.ip, Glb.port, query, 709);
 
-      if (responce.startsWith("Err:")) {
+      if (response.startsWith("Err:")) {
         return "ERROR";
       }
 
-      if (responce.startsWith("ErrorCode#2")) {
+      if (response.startsWith("ErrorCode#2")) {
         print("nodata");
       }
 
-      if (responce.startsWith("record#")) {
-        Map<String, List<String>> data = processRecords(responce);
+      if (response.startsWith("record#")) {
+        Map<String, List<String>> data = processRecords(response);
 
         Glb.subname_lst = data['X^1_1'] ?? [];
         Glb.marks_total_lst = data['X^2_2'] ?? [];
@@ -1500,21 +1498,21 @@ class _StudentDashboardState extends State<StudentDashboard> {
   }
 
   void SelectStudentPopUp(int position) async {
-    setState(() {
-      isLoading = true;
-    });
+    setState(() { isLoading = true; });
 
     StudentLoginInfoObj? obj = studentLoginInfoMap["${Glb.userid}"];
 
     if (obj == null) {
-      print("Main Object is Null :");
+      print("Main Object is Null");
+      setState(() { isLoading = false; }); 
       return;
     }
     if (position < 0 || position >= obj.inst_id_lst.length) {
-      print(
-          "❌ Invalid index: $position (List length: ${obj.inst_id_lst.length})");
+      print("❌ Invalid index: $position");
+      setState(() { isLoading = false; }); 
       return;
     }
+
     String fix(value) {
       if (value == null) return "NA";
       String s = value.toString().trim();
