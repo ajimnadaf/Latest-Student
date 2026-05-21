@@ -85,12 +85,6 @@ String notification_date = "";
 String logo_url = "";
 String cidCur = "";
 
-bool isLoading = false;
-bool notifi_stat = false;
-
-int studid = 0, status = 0;
-
-SocketService socketService = SocketService();
 SharedPreferenceService pref = SharedPreferenceService();
 
 class StudentDashboard1 extends StatefulWidget {
@@ -101,6 +95,13 @@ class StudentDashboard1 extends StatefulWidget {
 }
 
 class _StudentDashboard1State extends State<StudentDashboard1> {
+  bool isLoading = false;                      
+  final SocketService socketService = SocketService();
+
+  bool notifi_stat = false;  
+  int studid = 0;            
+  int status = 0;
+
   int _notificationCount = 0;
   Timer? _timer;
 
@@ -284,11 +285,13 @@ class _StudentDashboard1State extends State<StudentDashboard1> {
 
     if (obj == null) {
       print("Main Object is Null :");
+      setState(() { isLoading = false; });
       return;
     }
     if (position < 0 || position >= obj.inst_id_lst.length) {
       print(
           "❌ Invalid index: $position (List length: ${obj.inst_id_lst.length})");
+          setState(() { isLoading = false; });
       return;
     }
     String fix(value) {
@@ -518,7 +521,7 @@ class _StudentDashboard1State extends State<StudentDashboard1> {
     }
 
     if (response.startsWith("record#")) {
-      nodata == false;
+      nodata = false;
       Map<String, List<String>> data = processRecords(response);
       String splash = data['X^1_1']![0];
       String logo = data['X^2_2']![0];
@@ -556,7 +559,7 @@ class _StudentDashboard1State extends State<StudentDashboard1> {
 
     print("query");
     String responce =
-        await socketService.sendMessage(Glb.ip, Glb.port, query, 709);
+        await socketService.sendMessage(Glb.ip, Glb.port, query1, 709);
     if (responce.startsWith("Err:")) {
       print("aboars");
       return "ERROR";
@@ -570,9 +573,7 @@ class _StudentDashboard1State extends State<StudentDashboard1> {
 
       Glb.today_noti_count = data['X^1_1']![0];
       print("Notification count: ${Glb.today_noti_count}");
-      setState(() {
-        Glb.today_noti_count;
-      });
+      setState(() {});
     }
 
     return "SUCCESS";
@@ -1212,7 +1213,7 @@ td.three {
       subject_remark = data['X^1_1'] ?? [];
       subjec_rem_subid = data['X^2_2'] ?? [];
     }
-    return "ERROR";
+    return "SUCCESS";
   }
 
   Future<String> get_scholarship_details() async {
@@ -1279,8 +1280,6 @@ td.three {
         (d.contains("ERROR") == true) ||
         (e.contains("ERROR") == true)) {
       return "ERROR";
-    } else {
-      return "SUCCESS";
     }
     return "SUCCESS";
   }
@@ -1302,8 +1301,8 @@ td.three {
   }
 
   String checkStatus() {
-    studid = int.parse(Glb.student_id);
-    status = int.parse(Glb.Status);
+    studid = int.tryParse(Glb.student_id) ?? 0;
+    status = int.tryParse(Glb.Status) ?? 0;
     String ret = "";
 
     if (studid > 0 && status == 0) {
